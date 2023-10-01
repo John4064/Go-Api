@@ -1,10 +1,10 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Article struct {
@@ -15,22 +15,20 @@ type Article struct {
 
 var Articles []Article
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to the HomePage!")
-	fmt.Println("Endpoint Hit: homePage")
-}
-
-func returnAllArticles(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit: returnAllArticles")
-	json.NewEncoder(w).Encode(Articles)
+func returnAllArticles(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, Articles)
 }
 
 func handleRequests() {
-	http.HandleFunc("/", homePage)
-	// add our articles route and map it to our
-	// returnAllArticles function like so
-	http.HandleFunc("/articles", returnAllArticles)
-	log.Fatal(http.ListenAndServe(":10000", nil))
+	log.Print("Launched")
+
+	router := gin.Default()
+	router.GET("/all", func(c *gin.Context) {
+		// Handle the request and send a JSON response
+		c.JSON(http.StatusOK, gin.H{"message": "Hello, World!"})
+	})
+
+	router.Run(":3600")
 }
 
 func main() {
