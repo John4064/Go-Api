@@ -27,6 +27,10 @@ func handleRequests() {
 		// Handle the request and send a JSON response
 		c.JSON(http.StatusOK, gin.H{"message": "Hello, World!"})
 	})
+	router.GET("/health", func(c *gin.Context) {
+		// Handle the request and send a JSON response
+		c.JSON(http.StatusOK, gin.H{"message": "Online: Version 1.0"})
+	})
 
 	router.Run(":3600")
 }
